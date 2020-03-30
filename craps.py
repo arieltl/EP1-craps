@@ -20,3 +20,7 @@ def any_craps(dados,aposta):
         return ("ganhou", 8*aposta)
     return ("perdeu", 0)
 
+def twelve(dados,aposta):
+    if dados == 12:
+        return ("ganhou", 31*aposta)
+    return ("perdeu", 0)

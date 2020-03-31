@@ -71,6 +71,7 @@ while continua_jogando:
         else:
             apostas_escolhidas.append(apostas[apostas_disponiveis[resposta-1]])
             valores_apostados.append(int(input("quanto quer apostar?")))
+            fichas -= valores_apostados[-1]
             del apostas_disponiveis[resposta-1]
             
         

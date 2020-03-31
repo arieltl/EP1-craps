@@ -37,7 +37,7 @@ def quer_continuar(fichas,fase):
         print("resposta invalida")
 
 
-    
+#variaveis  
 continua_jogando = True
 fichas = 100
 fases = ["come out","point"]
@@ -46,9 +46,12 @@ apostas = {"pass line":pass_line,"field":field,"any craps":any_craps,"twelve":tw
 apostas_disponiveis = []
 funcoes = globals().copy()
 funcoes.update(locals())
-
-while continua_jogando:
-    continua_jogando = quer_continuar(fichas,fases[fase])
+#loop de jgo
+while fichas >= 0:
+    #verifica se jogador quer continuar jogando
+    if not quer_continuar(fichas,fases[fase]):
+        break
+    
     dados = random.randint(1,6) + random.randint(1,6)
 
     continuar = True
@@ -56,7 +59,7 @@ while continua_jogando:
     valores_apostados = []
     apostas_disponiveis = list(apostas.keys())
     while continuar:
-        print("você tem {} fichase fez {} apostas. Quer adicionar uma aposta?".format(fichas,len(apostas_escolhidas)))
+        print("você tem {} fichas disponiveis e fez {} apostas. Quer adicionar uma aposta?".format(fichas,len(apostas_escolhidas)))
         for i,item in enumerate(apostas_disponiveis):
             print("{}. {}".format(i+1,apostas_disponiveis[i]))
         try:
@@ -69,13 +72,19 @@ while continua_jogando:
         elif resposta == len(apostas_disponiveis)+1:
             continuar = False
         else:
-            apostas_escolhidas.append(apostas[apostas_disponiveis[resposta-1]])
-            valores_apostados.append(int(input("quanto quer apostar?")))
-            fichas -= valores_apostados[-1]
-            del apostas_disponiveis[resposta-1]
-            
+            try:
+                aposta = int(input("quanto quer apostar?"))
+                if aposta <= fichas:
+                    apostas_escolhidas.append(apostas[apostas_disponiveis[resposta-1]])
+                    valores_apostados.append(aposta)
+                    fichas -= valores_apostados[-1]
+                    del apostas_disponiveis[resposta-1]
+                else:
+                    print("fichas insuficientes")
+            except:
+                print("resposta invalida")
         
-    print("\n a soma dos dados deu: {}".format(dados))
+    print("\na soma dos dados deu: {}".format(dados))
 
     for i,aposta in enumerate(apostas_escolhidas):
         nome = list(apostas.keys())[list(apostas.values()).index(aposta)]
@@ -86,3 +95,5 @@ while continua_jogando:
         elif resultado[0] == "perdeu":
             print("voce perdeu a aposta {}".format(nome))
         
+if fichas <= 0:
+    print("Suas fichas acabaram")

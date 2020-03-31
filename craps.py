@@ -52,7 +52,7 @@ class Fase(Enum):
 #variaveis  
 fichas = 100
 
-fase = Fase.point
+fase = Fase.comeout
 apostas = {"pass line":pass_line,"field":field,"any craps":any_craps,"twelve":twelve}
 apostas_disponiveis = []
 funcoes = globals().copy()
@@ -109,7 +109,16 @@ while fichas >= 0:
                 print("resposta invalida")
         
     print("\na soma dos dados deu: {}".format(dados))
-
+    if fase == Fase.point:
+            resultado_point = point(dados,valor_do_point)
+            if resultado_point == "ganhou":
+                fichas += valor_apostado_point 
+                print("voce ganhou o point")
+                fase = Fase.comeout
+            elif resultado_point == "perdeu":
+                print("voce perdeu o point")
+                fase = Fase.comeout
+                
     for i,aposta in enumerate(apostas_escolhidas):
         nome = list(apostas.keys())[list(apostas.values()).index(aposta)]
         resultado = aposta(dados,valores_apostados[i])
@@ -119,19 +128,12 @@ while fichas >= 0:
         elif resultado[0] == "perdeu":
             print("voce perdeu a aposta {}".format(nome))
         else:
+            print("voce foi para rodada point")
             fase = Fase.point
             valor_apostado_point = resultado[1]
             valor_do_point = dados
 
-    if fase == Fase.point:
-        resultado_point = point(dados,valor_do_point)
-        if resultado_point == "ganhou":
-            fichas += valor_apostado_point 
-            print("voce ganhou o point")
-            fase = Fase.comeout
-        elif resultado_point == "perdeu":
-            print("voce perdeu o point")
-            fase = Fase.comeout
+    
 
 if fichas <= 0:
     print("Suas fichas acabaram")

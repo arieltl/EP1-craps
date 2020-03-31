@@ -74,7 +74,7 @@ while continua_jogando:
             del apostas_disponiveis[resposta-1]
             
         
-        print("\n a soma dos dados deu: {}".format(dados))
+    print("\n a soma dos dados deu: {}".format(dados))
 
     for i,aposta in enumerate(apostas_escolhidas):
         nome = list(apostas.keys())[list(apostas.values()).index(aposta)]

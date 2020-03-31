@@ -68,7 +68,8 @@ while fichas >= 0:
     continuar_a_apostar = True
     apostas_escolhidas = []
     valores_apostados = []
-    apostas_disponiveis = list(apostas.keys())
+    limite_apostas = 0 if fase == Fase.comeout else 1
+    apostas_disponiveis = list(apostas.keys())[limite_apostas:]
     valor_do_point = 0
     valor_apostado_point = 0
     
@@ -76,9 +77,9 @@ while fichas >= 0:
     while continuar_a_apostar:
         print("você tem {} fichas disponiveis e fez {} apostas. Quer adicionar uma aposta?".format(fichas,len(apostas_escolhidas)))
         #remover aposta pass line se estiver em rodada point
-        limite_apostas = 0 if fase == Fase.comeout else 1
+        
         #mostrar apostas disponiveis
-        for i,item in enumerate(apostas_disponiveis[limite_apostas:]):
+        for i,item in enumerate(apostas_disponiveis):
             print("{}. {}".format(i+1,apostas_disponiveis[i]))
         
         #verificar se input é valido

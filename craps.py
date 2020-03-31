@@ -1,5 +1,7 @@
 import random
 import time
+from enum import Enum
+
 #Funcoes de aposta
 def pass_line(dados,aposta):
     if dados in {7,11}:
@@ -36,29 +38,32 @@ def quer_continuar(fichas,fase):
             return False
         print("resposta invalida")
 
+class Fase(Enum):
+    comeout = "Come Out"
+    point = "Point"
 
 #variaveis  
-continua_jogando = True
 fichas = 100
-fases = ["come out","point"]
-fase = 0
+
+fase = Fase.comeout
 apostas = {"pass line":pass_line,"field":field,"any craps":any_craps,"twelve":twelve}
 apostas_disponiveis = []
 funcoes = globals().copy()
 funcoes.update(locals())
-#loop de jgo
+#loop de jogo
 while fichas >= 0:
     #verifica se jogador quer continuar jogando
-    if not quer_continuar(fichas,fases[fase]):
+    if not quer_continuar(fichas,fase.value):
         break
     
     dados = random.randint(1,6) + random.randint(1,6)
 
-    continuar = True
+    continuar_a_apostar = True
     apostas_escolhidas = []
     valores_apostados = []
     apostas_disponiveis = list(apostas.keys())
-    while continuar:
+
+    while continuar_a_apostar:
         print("você tem {} fichas disponiveis e fez {} apostas. Quer adicionar uma aposta?".format(fichas,len(apostas_escolhidas)))
         for i,item in enumerate(apostas_disponiveis):
             print("{}. {}".format(i+1,apostas_disponiveis[i]))
@@ -70,7 +75,7 @@ while fichas >= 0:
             print("resposta invalida\n \n")
             time.sleep(1)
         elif resposta == len(apostas_disponiveis)+1:
-            continuar = False
+            continuar_a_apostar = False
         else:
             try:
                 aposta = int(input("quanto quer apostar?"))
@@ -94,6 +99,7 @@ while fichas >= 0:
             print("voce ganhou {} fichas na aposta {}".format(resultado[1]-valores_apostados[i],nome))
         elif resultado[0] == "perdeu":
             print("voce perdeu a aposta {}".format(nome))
-        
+
+
 if fichas <= 0:
     print("Suas fichas acabaram")

@@ -5,12 +5,12 @@ def pass_line(dados,aposta):
     if dados in {7,11}:
         return ("ganhou", 2*aposta)
     if dados in {2,3,12}:
-        return ("perdeu", 0)
+        return ("perdeu", aposta)
     return ("point", aposta)
 
 def field(dados,aposta):
     if dados in {5,6,7,8}:
-        return ("perdeu", 0)
+        return ("perdeu", aposta)
     if dados in {3,4,9,10,11}:
         return ("ganhou", 2*aposta)
     if dados == 2:
@@ -53,6 +53,7 @@ while continua_jogando:
 
     continuar = True
     apostas_escolhidas = []
+    valores_apostados = []
     apostas_disponiveis = list(apostas.keys())
     while continuar:
         print("você tem {} fichase fez {} apostas. Quer adicionar uma aposta?".format(fichas,len(apostas_escolhidas)))
@@ -69,5 +70,18 @@ while continua_jogando:
             continuar = False
         else:
             apostas_escolhidas.append(apostas[apostas_disponiveis[resposta-1]])
+            valores_apostados.append(int(input("quanto quer apostar?")))
             del apostas_disponiveis[resposta-1]
-            print(apostas_escolhidas)
+            
+        
+        print("\n a soma dos dados deu: {}".format(dados))
+
+    for i,aposta in enumerate(apostas_escolhidas):
+        nome = list(apostas.keys())[list(apostas.values()).index(aposta)]
+        resultado = aposta(dados,valores_apostados[i])
+        if resultado[0] ==  "ganhou":
+            fichas += resultado[1]
+            print("voce ganhou {} fichas na aposta {}".format(resultado[1]-valores_apostados[i],nome))
+        elif resultado[0] == "perdeu":
+            print("voce perdeu a aposta {}".format(nome))
+        

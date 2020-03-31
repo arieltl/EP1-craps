@@ -38,6 +38,13 @@ def quer_continuar(fichas,fase):
             return False
         print("resposta invalida")
 
+def point(dados,valor):
+    if dados == valor:
+        return("ganhou")
+    elif dados == 7:
+        return("perdeu")
+    return
+
 class Fase(Enum):
     comeout = "Come Out"
     point = "Point"
@@ -45,7 +52,7 @@ class Fase(Enum):
 #variaveis  
 fichas = 100
 
-fase = Fase.comeout
+fase = Fase.point
 apostas = {"pass line":pass_line,"field":field,"any craps":any_craps,"twelve":twelve}
 apostas_disponiveis = []
 funcoes = globals().copy()
@@ -62,20 +69,31 @@ while fichas >= 0:
     apostas_escolhidas = []
     valores_apostados = []
     apostas_disponiveis = list(apostas.keys())
-
+    valor_do_point = 0
+    valor_apostado_point = 0
+    
+    #Adicionar apostas na rodada
     while continuar_a_apostar:
         print("você tem {} fichas disponiveis e fez {} apostas. Quer adicionar uma aposta?".format(fichas,len(apostas_escolhidas)))
-        for i,item in enumerate(apostas_disponiveis):
+        #remover aposta pass line se estiver em rodada point
+        limite_apostas = 0 if fase == Fase.comeout else 1
+        #mostrar apostas disponiveis
+        for i,item in enumerate(apostas_disponiveis[limite_apostas:]):
             print("{}. {}".format(i+1,apostas_disponiveis[i]))
+        
+        #verificar se input é valido
         try:
             resposta = int(input("{}. finalizar apostas \n".format(len(apostas_disponiveis)+1)))
         except:
             resposta = 6
+        
         if not resposta in range(1,len(apostas_disponiveis)+2):
             print("resposta invalida\n \n")
             time.sleep(1)
+        #finalizar apostas caso o usuario queira
         elif resposta == len(apostas_disponiveis)+1:
             continuar_a_apostar = False
+        #contabilziar fichas e adicionar aposta selecionada
         else:
             try:
                 aposta = int(input("quanto quer apostar?"))
@@ -99,7 +117,20 @@ while fichas >= 0:
             print("voce ganhou {} fichas na aposta {}".format(resultado[1]-valores_apostados[i],nome))
         elif resultado[0] == "perdeu":
             print("voce perdeu a aposta {}".format(nome))
+        else:
+            fase = Fase.point
+            valor_apostado_point = resultado[1]
+            valor_do_point = dados
 
+    if fase == Fase.point:
+        resultado_point = point(dados,valor_do_point)
+        if resultado_point == "ganhou":
+            fichas += valor_apostado_point 
+            print("voce ganhou o point")
+            fase = Fase.comeout
+        elif resultado_point == "perdeu":
+            print("voce perdeu o point")
+            fase = Fase.comeout
 
 if fichas <= 0:
     print("Suas fichas acabaram")

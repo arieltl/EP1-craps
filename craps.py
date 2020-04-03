@@ -97,7 +97,9 @@ while fichas >= 0:
         #contabilziar fichas e adicionar aposta selecionada
         else:
             try:
+                #verificar quanto usuario vai apostar
                 aposta = int(input("quanto quer apostar?"))
+                #verificar se o usuario tem fichas suficientes
                 if aposta <= fichas:
                     apostas_escolhidas.append(apostas[apostas_disponiveis[resposta-1]])
                     valores_apostados.append(aposta)
@@ -109,6 +111,7 @@ while fichas >= 0:
                 print("resposta invalida")
         
     print("\na soma dos dados deu: {}".format(dados))
+    # verificar se esta em fase point e caso esteja rodar logica da rodada
     if fase == Fase.point:
             resultado_point = point(dados,valor_do_point)
             if resultado_point == "ganhou":
@@ -118,7 +121,7 @@ while fichas >= 0:
             elif resultado_point == "perdeu":
                 print("voce perdeu o point")
                 fase = Fase.comeout
-                
+    #Rodar apostas           
     for i,aposta in enumerate(apostas_escolhidas):
         nome = list(apostas.keys())[list(apostas.values()).index(aposta)]
         resultado = aposta(dados,valores_apostados[i])
@@ -137,3 +140,4 @@ while fichas >= 0:
 
 if fichas <= 0:
     print("Suas fichas acabaram")
+
